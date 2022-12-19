@@ -20,6 +20,10 @@
     "prettier"
   ],
   "rules": {
+    "react/prop-types": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off",
+    "@typescript-eslint/consistent-type-assertions": "off",
+    "@typescript-eslint/no-floating-promises": "off",
     "prettier/prettier": "error",
     "import/prefer-default-export": "off",
     "@typescript-eslint/no-namespace": "off",
