@@ -22,7 +22,7 @@ export interface ThemeProviderProps {
 export const ThemeContext = createContext({} as ThemeContextProps);
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     (async () => {

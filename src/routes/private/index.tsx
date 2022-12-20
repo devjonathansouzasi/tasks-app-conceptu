@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { RouteNames } from "../../constants/routeNames";
 import { Home } from "../../screens/Home";
+import { NewTaskModal } from "../../screens/NewTaskModal";
 import { PrivateStackParamList } from "../types";
 
 const Stack = createNativeStackNavigator<PrivateStackParamList>();
@@ -13,6 +14,13 @@ const PrivateRoutes = () => {
       screenOptions={{ headerShown: false }}
     >
       <Stack.Screen name={RouteNames.PRIVATE.HOME} component={Home} />
+      <Stack.Screen
+        name={RouteNames.PRIVATE.NEW_TASK_MODAL}
+        component={NewTaskModal}
+        options={{
+          presentation: "formSheet",
+        }}
+      />
     </Stack.Navigator>
   );
 };

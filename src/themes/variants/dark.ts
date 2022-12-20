@@ -1,6 +1,4 @@
-import { DefaultTheme } from "styled-components";
-
-const DarkTheme: DefaultTheme = {
+const DarkTheme = {
   type: "dark",
   colors: {
     common: {
@@ -16,7 +14,7 @@ const DarkTheme: DefaultTheme = {
     gray: {
       lighter: "#4A4A58",
       light: "#ddd",
-      regular: "#FFF",
+      regular: "#dadada",
       dark: "#FFF",
     },
     info: "#0297D8",
@@ -24,7 +22,7 @@ const DarkTheme: DefaultTheme = {
     warning: "#FF9F43",
     error: "#EA5455",
   },
-} as const;
+};
 
 type DarkThemeProps = typeof DarkTheme;
 
