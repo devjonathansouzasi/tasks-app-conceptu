@@ -5,9 +5,11 @@ import { ScrollView } from "react-native-gesture-handler";
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { useNavigation } from "@react-navigation/native";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useTheme } from "styled-components";
 
 import { TextInput } from "../../components";
+import { firAuth } from "../../config/firebase";
 import { RouteNames } from "../../constants/routeNames";
 import {
   FormContainer,
@@ -21,12 +23,18 @@ export const Login: React.FC = () => {
   const { colors } = useTheme();
   const { navigate } = useNavigation();
 
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = () => {
-    navigate(RouteNames.PRIVATE.ROOT);
+  const handleLogin = async () => {
+    if (!email.length || !password.length) {
+      return;
+    }
+    try {
+      await signInWithEmailAndPassword(firAuth, email, password);
+    } catch (error) {}
   };
+
   const handleNavigateToNewAccount = () => {
     navigate(RouteNames.PUBLIC.NEW_ACCOUNT);
   };
@@ -49,8 +57,8 @@ export const Login: React.FC = () => {
         >
           <FormContainer>
             <TextInput
-              value={username}
-              onChangeText={value => setUsername(value)}
+              value={email}
+              onChangeText={value => setEmail(value)}
               placeholder="Digite seu email"
               leftContent={({ color }) => (
                 <MaterialIcons name="mail-outline" size={24} color={color} />

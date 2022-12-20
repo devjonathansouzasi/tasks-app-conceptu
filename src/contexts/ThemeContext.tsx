@@ -4,10 +4,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
 import { createContext } from "use-context-selector";
 
-import { expo } from "../../app.json";
+import appConfig from "../../app.config";
 import { LightTheme, DarkTheme } from "../themes";
 
-const APP_KEY_NAME = expo.name;
+const APP_KEY_NAME = appConfig.expo.name;
 
 export interface ThemeContextProps {
   currentTheme: "light" | "dark";
