@@ -1,56 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 
 import { MaterialIcons } from "@expo/vector-icons";
 
 import { useNavigation } from "@react-navigation/core";
+import { query, collection, where, onSnapshot } from "firebase/firestore";
 import { useTheme } from "styled-components";
 
+import { firFirestore } from "../../config/firebase";
 import { RouteNames } from "../../constants/routeNames";
+import { useAuthentication } from "../../hooks/useAuthentication";
+import { Task } from "../../Models/Task";
 import { Header } from "./components/Header";
 import TaskItem from "./components/TaskItem";
-import { Task } from "./components/TaskItem/types";
 import { Container, NewTaskButton } from "./styles";
-
-const MOCKED_TASKS: Task[] = [
-  {
-    id: "0",
-    title: "Concluir o app",
-    description:
-      "Preciso concluir o app de review da ConceptuPreciso concluir o app de review da ConceptuPreciso concluir o app de review da ConceptuPreciso concluir o app de review da ConceptuPreciso concluir o app de review da ConceptuPreciso concluir o app de review da ConceptuPreciso concluir o app de review da ConceptuPreciso concluir o app de review da Conceptu",
-    status: "PENDENT",
-  },
-  {
-    id: "1",
-    title: "Concluir o app",
-    description: "Preciso concluir o app de review da Conceptu",
-    status: "DONE",
-  },
-  {
-    id: "91",
-    title: "Concluir o app",
-    description: "Preciso concluir o app de review da Conceptu",
-    status: "PENDENT",
-  },
-  {
-    id: "15",
-    title: "Concluir o app",
-    description: "Preciso concluir o app de review da Conceptu",
-    status: "EXPIRED",
-  },
-  {
-    id: "42",
-    title: "Concluir o app",
-    description: "Preciso concluir o app de review da Conceptu",
-    status: "EXPIRED",
-  },
-];
-
 export const Home: React.FC = () => {
   const { colors } = useTheme();
   const { navigate } = useNavigation();
-  const [tasks, setTasks] = useState<Task[]>(MOCKED_TASKS);
+  const { user } = useAuthentication();
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      const tasksByUserQuery = query(
+        collection(firFirestore, "tasks"),
+        where("ownerId", "==", user.uid),
+      );
+      const unsubscriber = onSnapshot(tasksByUserQuery, snapshot => {
+        const result: Task[] = [];
+
+        snapshot.forEach(doc => {
+          result.push({
+            id: doc.id,
+            ...doc.data(),
+          } as Task);
+        });
+
+        setTasks(result);
+      });
+      setRefreshing(false);
+      return unsubscriber;
+    }
+  }, [user, refreshing]);
 
   const handleOpenNewTaskFormModal = () => {
     navigate(RouteNames.PRIVATE.NEW_TASK_MODAL);
@@ -58,8 +50,6 @@ export const Home: React.FC = () => {
 
   const handleRefresh = () => {
     setRefreshing(true);
-    setTasks(oldTasks => oldTasks.sort(() => Math.random() - 0.5));
-    setRefreshing(false);
   };
 
   return (
@@ -86,6 +76,7 @@ export const Home: React.FC = () => {
         renderItem={({ item }) => (
           <TaskItem
             key={item.id}
+            id={item.id}
             title={item.title}
             description={item.description}
             status={item.status}

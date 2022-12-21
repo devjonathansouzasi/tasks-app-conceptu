@@ -4,8 +4,11 @@ import { Swipeable } from "react-native-gesture-handler";
 
 import { Entypo, MaterialIcons } from "@expo/vector-icons";
 
+import { deleteDoc, doc } from "firebase/firestore";
 import { useTheme } from "styled-components";
 
+import { firFirestore } from "../../../../config/firebase";
+import { TaskStatus } from "../../../../Models/Task";
 import {
   Container,
   Left,
@@ -15,9 +18,9 @@ import {
   Right,
   ShowOptionsButton,
 } from "./styles";
-import { TaskItemProps, TaskStatus } from "./types";
+import { TaskItemProps } from "./types";
 
-const TaskItem: React.FC<TaskItemProps> = ({ title, description, status }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ id, title, description, status }) => {
   const { colors } = useTheme();
   const swipeableRef = useRef<Swipeable | null>(null);
 
@@ -44,6 +47,11 @@ const TaskItem: React.FC<TaskItemProps> = ({ title, description, status }) => {
     swipeableRef.current?.openRight();
   };
 
+  const handleDeleteItem = () => {
+    const taskRef = doc(firFirestore, "tasks", id);
+    deleteDoc(taskRef);
+  };
+
   return (
     <Swipeable
       ref={swipeableRef}
@@ -61,6 +69,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ title, description, status }) => {
           }}
         >
           <TouchableOpacity
+            onPress={handleDeleteItem}
             activeOpacity={0.7}
             style={{
               flex: 1,
