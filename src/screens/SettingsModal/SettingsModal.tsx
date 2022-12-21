@@ -1,13 +1,19 @@
 import { Switch } from "react-native";
 
+import { signOut } from "firebase/auth";
 import { useTheme as useThemeSC } from "styled-components";
 
+import { firAuth } from "../../config/firebase";
 import { useTheme } from "../../hooks/useTheme";
 import { Container, LogoutButton, LogoutButtonText } from "./styles";
 
 export const SettingsModal: React.FC = () => {
   const { colors } = useThemeSC();
   const { currentTheme, toggleTheme } = useTheme();
+
+  const handleLogout = async () => {
+    await signOut(firAuth);
+  };
 
   return (
     <Container>
@@ -19,7 +25,7 @@ export const SettingsModal: React.FC = () => {
         }}
         thumbColor={colors.primary}
       />
-      <LogoutButton>
+      <LogoutButton onPress={handleLogout}>
         <LogoutButtonText>Sair</LogoutButtonText>
       </LogoutButton>
     </Container>

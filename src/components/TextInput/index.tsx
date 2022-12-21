@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { TouchableOpacity } from "react-native-gesture-handler";
+
+import { Ionicons } from "@expo/vector-icons";
 
 import { useTheme } from "styled-components";
 
@@ -10,13 +13,20 @@ export const TextInput: React.FC<TextInputProps> = ({
   value,
   leftContent: LeftContent,
   rightContent: RightContent,
-  onChange,
+  onChangeText,
+  secureTextEntry,
   marginBottom,
   ...rest
 }) => {
-  const theme = useTheme();
-
+  const { colors } = useTheme();
   const [isFocused, setIsFocused] = useState(false);
+  const [secureText, setSecureText] = useState(secureTextEntry);
+
+  const handleClearText = () => {
+    if (value?.length && !!onChangeText) {
+      onChangeText("");
+    }
+  };
 
   return (
     <Container
@@ -25,25 +35,37 @@ export const TextInput: React.FC<TextInputProps> = ({
       style={[{}, rest?.multiline && { height: "auto" }]}
     >
       {LeftContent ? (
-        <LeftContent
-          color={isFocused || value?.length ? theme.colors.gray.dark : theme.colors.gray.light}
-        />
+        <LeftContent color={isFocused || value?.length ? colors.gray.dark : colors.gray.light} />
       ) : null}
       <Input
         value={value}
+        onChangeText={onChangeText}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
-        placeholderTextColor={theme.colors.gray.regular}
+        placeholderTextColor={colors.gray.regular}
         autoCapitalize="none"
         keyboardType="default"
+        secureTextEntry={secureText}
         {...rest}
       />
-      {RightContent ? (
-        <RightContent
-          color={isFocused || value?.length ? theme.colors.gray.dark : theme.colors.gray.light}
-        />
-      ) : null}
+      <>
+        {value?.length && secureTextEntry ? (
+          <TouchableOpacity style={{ marginRight: 8 }} onPress={() => setSecureText(old => !old)}>
+            <Ionicons
+              name={secureText ? "eye-off-outline" : "eye-outline"}
+              size={24}
+              color={colors.gray.dark}
+            />
+          </TouchableOpacity>
+        ) : null}
+        {value?.length ? (
+          <TouchableOpacity onPress={handleClearText}>
+            <Ionicons name="close-circle-outline" size={24} color={colors.gray.dark} />
+          </TouchableOpacity>
+        ) : null}
+        {RightContent ? <RightContent color={colors.gray.dark} /> : null}
+      </>
     </Container>
   );
 };

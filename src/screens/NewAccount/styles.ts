@@ -26,6 +26,7 @@ export const LoginButton = styled.TouchableOpacity`
 export const LoginButtonText = styled.Text`
   color: ${({ theme }) => theme.colors.common.white};
   font-size: 16px;
+  font-weight: bold;
 `;
 
 export const NewAccountButton = styled.TouchableOpacity`
@@ -37,4 +38,5 @@ export const NewAccountButton = styled.TouchableOpacity`
 export const NewAccountText = styled.Text`
   color: ${({ theme }) => theme.colors.gray.dark};
   font-size: 16px;
+  font-weight: bold;
 `;

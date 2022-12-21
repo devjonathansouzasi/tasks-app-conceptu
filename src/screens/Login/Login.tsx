@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Keyboard, Platform, KeyboardAvoidingView, TouchableWithoutFeedback } from "react-native";
+import {
+  Keyboard,
+  Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  ActivityIndicator,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 
 import { MaterialIcons } from "@expo/vector-icons";
@@ -23,16 +29,23 @@ export const Login: React.FC = () => {
   const { colors } = useTheme();
   const { navigate } = useNavigation();
 
+  const [isLoading, setIsLoading] = useState(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async () => {
+    setIsLoading(true);
     if (!email.length || !password.length) {
+      setIsLoading(false);
       return;
     }
     try {
       await signInWithEmailAndPassword(firAuth, email, password);
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleNavigateToNewAccount = () => {
@@ -74,8 +87,12 @@ export const Login: React.FC = () => {
                 <MaterialIcons name="lock-outline" size={24} color={color} />
               )}
             />
-            <LoginButton onPress={handleLogin}>
-              <LoginButtonText>Entrar</LoginButtonText>
+            <LoginButton onPress={handleLogin} disabled={isLoading}>
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <LoginButtonText>Entrar</LoginButtonText>
+              )}
             </LoginButton>
             <NewAccountButton onPress={handleNavigateToNewAccount}>
               <NewAccountText>Criar conta</NewAccountText>
