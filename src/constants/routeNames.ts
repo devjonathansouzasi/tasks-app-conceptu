@@ -8,5 +8,6 @@ export const RouteNames = {
     ROOT: "PRIVATE",
     HOME: "HOME",
     NEW_TASK_MODAL: "NEW_TASK_MODAL",
+    SETTINGS_MODAL: "SETTINGS_MODAL",
   },
 } as const;

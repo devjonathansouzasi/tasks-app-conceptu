@@ -21,6 +21,7 @@ export type PrivateStackParamList = {
   [RouteNames.PRIVATE.ROOT]: undefined;
   [RouteNames.PRIVATE.HOME]: undefined;
   [RouteNames.PRIVATE.NEW_TASK_MODAL]: undefined;
+  [RouteNames.PRIVATE.SETTINGS_MODAL]: undefined;
 };
 
 export type PublicStackScreenProps<T extends keyof PublicStackParamList> = StackScreenProps<

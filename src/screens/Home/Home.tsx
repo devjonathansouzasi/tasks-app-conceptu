@@ -7,9 +7,10 @@ import { useNavigation } from "@react-navigation/core";
 import { useTheme } from "styled-components";
 
 import { RouteNames } from "../../constants/routeNames";
+import { Header } from "./components/Header";
 import TaskItem from "./components/TaskItem";
 import { Task } from "./components/TaskItem/types";
-import { Container, Header, TitleText, NewTaskButton } from "./styles";
+import { Container, NewTaskButton } from "./styles";
 
 const MOCKED_TASKS: Task[] = [
   {
@@ -72,11 +73,7 @@ export const Home: React.FC = () => {
         data={tasks}
         keyExtractor={({ id }) => id}
         ItemSeparatorComponent={() => <View style={{ padding: 5 }} />}
-        ListHeaderComponent={() => (
-          <Header>
-            <TitleText>Minhas Tarefas</TitleText>
-          </Header>
-        )}
+        ListHeaderComponent={() => <Header />}
         ListEmptyComponent={() => (
           <View
             style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingTop: "50%" }}
